@@ -175,9 +175,11 @@ BB colored text<br>
     }
 </script>
 
-<div class="slidecontainer">
-    <input type="range" min="128" max="512" value="256" class="slider" id="myRange">
-</div>
+<br><br>
+Preview size
+<input type="range" min="128" max="1024" value="128" class="slider" id="preview_size_slider">
+<label id="preview_size">128</label> px
+<br><br>
 <script>
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
 
@@ -186,9 +188,17 @@ BB colored text<br>
         navigator.clipboard.writeText(baseUrl + text);
     }
 
-    var slider = document.getElementById("myRange");
+    var slider = document.getElementById("preview_size_slider");
+    window.onresize = () => {
+        let nValue = (slider.value - Number(slider.min)) / (Number(slider.max) - Number(slider.min));
+        slider.max = window.innerWidth - 34;
+        slider.value = Number(slider.min) + nValue * (Number(slider.max) - Number(slider.min));
+        slider.oninput();
+    }
+    slider.max = window.innerWidth - 34;
     slider.oninput = function () {
         for (const el of document.getElementsByClassName('imgel')) el.width = slider.value
+        document.getElementById("preview_size").innerText = slider.value
     }
 </script>
 <H1>CLICK TO COPY URL TO CLIPBOARD</H1>

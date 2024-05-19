@@ -1,0 +1,6 @@
+.git
+.idea
+common
+fonts
+girls
+girls_mobile
