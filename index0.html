@@ -174,8 +174,28 @@ BB colored text<br>
         Result(result)
     }
 </script>
-</script>
+
 <div class="slidecontainer">
     <input type="range" min="128" max="512" value="256" class="slider" id="myRange">
 </div>
+<script>
+    const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
+    function CopyToClipboard(text) {
+        console.log(baseUrl+text);
+        navigator.clipboard.writeText(baseUrl+text);
+    }
+    var slider = document.getElementById("myRange");
+    slider.oninput = function() {
+        let v = slider.value+"px"
+        let tds = document.getElementsByClassName("imgtd");
+        for(const t of tds) {
+            t.style.width = v
+        }
+        tds = document.getElementsByClassName("imgel");
+        for(const t of tds) {
+            t.width = v
+        }
+    }
+</script>
+<H1>CLICK TO COPY URL TO CLIPBOARD</H1>
 <!-- need file list with preview -->
