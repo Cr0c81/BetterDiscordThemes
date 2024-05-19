@@ -180,21 +180,15 @@ BB colored text<br>
 </div>
 <script>
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
+
     function CopyToClipboard(text) {
-        console.log(baseUrl+text);
-        navigator.clipboard.writeText(baseUrl+text);
+        console.log(baseUrl + text);
+        navigator.clipboard.writeText(baseUrl + text);
     }
+
     var slider = document.getElementById("myRange");
-    slider.oninput = function() {
-        let v = slider.value+"px"
-        let tds = document.getElementsByClassName("imgtd");
-        for(const t of tds) {
-            t.style.width = v
-        }
-        tds = document.getElementsByClassName("imgel");
-        for(const t of tds) {
-            t.width = v
-        }
+    slider.oninput = function () {
+        for (const el of document.getElementsByClassName('imgel')) el.width = slider.value
     }
 </script>
 <H1>CLICK TO COPY URL TO CLIPBOARD</H1>
