@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html style="background: #fff; height: 130%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="">
+BB colored text<br>
+<input id="text_string" type="text" value="sample text" style="width: 25%">
+<input id="color0" type="color" value="#000000">
+<input id="color1" type="color" value="#ffffff">
+<input id="text_type" type="checkbox">Random color
+<br><br>
+<input id="color_generate" type="button" value="Generate">
+<br><br>
+<input id="text_result" type="text" style="width: 100%">
+<script type="text/javascript">
+    // COLOR HUE
+    // Changes the RGB/HEX temporarily to a HSL-Value, modifies that value
+    // and changes it back to RGB/HEX.
+    function changeHue(rgb, degree) {
+        var hsl = rgbToHSL(rgb);
+        hsl.h += degree;
+        if (hsl.h > 360) {
+            hsl.h -= 360;
+        } else if (hsl.h < 0) {
+            hsl.h += 360;
+        }
+        return hslToRGB(hsl);
+    }
+
+    function rgbToHSL(rgb) {
+        // strip the leading # if it's there
+        rgb = rgb.replace(/^\s*#|\s*$/g, '');
+
+        // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+        if (rgb.length == 3) {
+            rgb = rgb.replace(/(.)/g, '$1$1');
+        }
+
+        var r = parseInt(rgb.substr(0, 2), 16) / 255,
+            g = parseInt(rgb.substr(2, 2), 16) / 255,
+            b = parseInt(rgb.substr(4, 2), 16) / 255,
+            cMax = Math.max(r, g, b),
+            cMin = Math.min(r, g, b),
+            delta = cMax - cMin,
+            l = (cMax + cMin) / 2,
+            h = 0,
+            s = 0;
+
+        if (delta == 0) {
+            h = 0;
+        } else if (cMax == r) {
+            h = 60 * (((g - b) / delta) % 6);
+        } else if (cMax == g) {
+            h = 60 * (((b - r) / delta) + 2);
+        } else {
+            h = 60 * (((r - g) / delta) + 4);
+        }
+
+        if (delta == 0) {
+            s = 0;
+        } else {
+            s = (delta / (1 - Math.abs(2 * l - 1)))
+        }
+
+        return {
+            h: h,
+            s: s,
+            l: l,
+        }
+    }
+
+    function hslToRGB(hsl) {
+        var h = hsl.h,
+            s = hsl.s,
+            l = hsl.l,
+            c = (1 - Math.abs(2 * l - 1)) * s,
+            x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+            m = l - c / 2,
+            r, g, b;
+
+        if (h < 60) {
+            r = c;
+            g = x;
+            b = 0;
+        } else if (h < 120) {
+            r = x;
+            g = c;
+            b = 0;
+        } else if (h < 180) {
+            r = 0;
+            g = c;
+            b = x;
+        } else if (h < 240) {
+            r = 0;
+            g = x;
+            b = c;
+        } else if (h < 300) {
+            r = x;
+            g = 0;
+            b = c;
+        } else {
+            r = c;
+            g = 0;
+            b = x;
+        }
+
+        r = normalize_rgb_value(r, m);
+        g = normalize_rgb_value(g, m);
+        b = normalize_rgb_value(b, m);
+
+        return rgbToHex(r, g, b);
+    }
+
+    function normalize_rgb_value(color, m) {
+        color = Math.floor((color + m) * 255);
+        if (color < 0) {
+            color = 0;
+        }
+        return color;
+    }
+
+    function rgbToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    //
+
+    // select all on focus
+    document.getElementById("text_result").addEventListener(`focus`, () => document.getElementById("text_result").select());
+    const splitColorToRGB = (string) => {
+        return [Number('0x' + string[1] + string[2]), Number('0x' + string[3] + string[4]), Number('0x' + string[5] + string[6])]
+    }
+    const RGBToColor = (array) => {
+        return `#${NumToHex(array[0])}${NumToHex(array[1])}${NumToHex(array[2])}`
+    }
+    const text = () => { return document.getElementById("text_string").value}
+    const Result = (value) => { return document.getElementById("text_result").value = value}
+    const color0 = () => { return document.getElementById("color0").value}
+    const color1 = () => { return document.getElementById("color1").value}
+    const textType = () => { return document.getElementById("text_type").checked}
+    const Lerp = (a, b, t) => {return a + (b - a) * t}
+    const NumToHex = (value) => {
+        let res = value.toString(16)
+        if (res.length < 2) res = '0' + res
+        return res
+    }
+    const RandomColor = () => {
+        let res = changeHue("#ff0000", Math.random() * 360)
+        let rgb = splitColorToRGB(res)
+        rgb[1] = Math.min(200, rgb[1])
+        return RGBToColor(rgb)
+    }
+
+    document.getElementById("color_generate").onclick = () => {
+        let result = "";
+        let c0 = splitColorToRGB(color0());
+        let c1 = splitColorToRGB(color1());
+        let t = text();
+        let tl = t.length - 1;
+        for (let i = 0; i < t.length; i++) {
+            if (t[i] === ' ')
+                result += t[i]
+            else {
+                if (!textType())
+                    result += `[color=#${NumToHex(Math.floor(Lerp(c0[0], c1[0], i / tl)))}${NumToHex(Math.floor(Lerp(c0[1], c1[1], i / tl)))}${NumToHex(Math.floor(Lerp(c0[2], c1[2], i / tl)))}]${t[i]}[/color]`;
+                else {
+                    let tt = Math.random()
+                    result += `[color=${RandomColor()}]${t[i]}[/color]`;
+                }
+            }
+        }
+        //console.log(result)
+        Result(result)
+    }
+</script>
+</script>
+<div class="slidecontainer">
+    <input type="range" min="128" max="512" value="256" class="slider" id="myRange">
+</div>
+<!-- need file list with preview -->
