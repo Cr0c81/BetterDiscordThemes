@@ -3,10 +3,8 @@ type index0.html>index.html
 dir /A:D /B > dirs.txt
 for /F "eol=; tokens=*" %%i in (dirs.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" CALL :create_filelist %%i
 
-rem CALL :create_filelist common
-rem CALL :create_filelist girls
-rem CALL :create_filelist girls_mobile
 type index1.html>>index.html
+del dirs.txt
 goto exit
 
 :create_filelist
