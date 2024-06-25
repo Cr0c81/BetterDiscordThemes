@@ -1,7 +1,7 @@
 echo off
 type index0.txt>index.html
 dir /A:D /B > dirs.txt
-for /F "eol=; tokens=*" %%i in (dirs.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" CALL :create_filelist %%i
+for /F "eol=; tokens=*" %%i in (dirs.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" CALL :create_filelist %%i
 
 type index1.txt>>index.html
 del dirs.txt
