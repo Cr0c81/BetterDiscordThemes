@@ -3,6 +3,12 @@
 <head>
     <meta charset="utf-8">
 </head>
+<style>
+    .textdesc {
+        max-width: 128px;
+        word-wrap: break-word;
+    }
+</style>
 <body style="">
 BB colored text<br>
 <input id="text_string" type="text" value="sample text" style="width: 25%">
@@ -176,30 +182,67 @@ BB colored text<br>
 </script>
 
 <br><br>
+<!--
 Preview size
-<input type="range" min="128" max="1024" value="128" class="slider" id="preview_size_slider">
-<label id="preview_size">128</label> px
+<input type="range" min="1" max="10" value="2" class="slider" id="preview_size_slider">
+<label id="preview_size">2</label> items
+-->
+<button id="b1" onclick=resize(1)> 1 item</button>
+<button id="b2" onclick=resize(2)> 2 item</button>
+<button id="b3" onclick=resize(3)> 3 item</button>
+<button id="b4" onclick=resize(4)> 4 item</button>
+<button id="b5" onclick=resize(5)> 5 item</button>
+<button id="b6" onclick=resize(6)> 6 item</button>
+<button id="b7" onclick=resize(7)> 7 item</button>
+<button id="b8" onclick=resize(8)> 8 item</button>
+<button id="b9" onclick=resize(9)> 9 item</button>
+<button id="b10" onclick=resize(10)> 10 item</button>
+
 <br><br>
-<script>
+<script defer>
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
+    var mwm = 30
+    var maxWidth = window.innerWidth - mwm
+    var count = 4
+
+    //var slider = document.getElementById("preview_size_slider");
+
+    function resize(cnt) {
+        if (cnt === undefined) cnt = count
+        else count = cnt
+        for (const el of document.getElementsByClassName('imgel')) el.width = Math.floor(maxWidth / cnt) - 5
+        for (const el of document.getElementsByClassName('imgtd')) el.width = Math.floor(maxWidth / cnt) - 5
+        for (const el of document.getElementsByClassName("textdesc")) el.style.maxWidth = Math.floor(maxWidth / cnt) - 5
+        //document.getElementById("preview_size").innerText = count
+
+    }
 
     function CopyToClipboard(text) {
         console.log(baseUrl + text);
         navigator.clipboard.writeText(baseUrl + text);
     }
 
-    var slider = document.getElementById("preview_size_slider");
     window.onresize = () => {
+        /*
         let nValue = (slider.value - Number(slider.min)) / (Number(slider.max) - Number(slider.min));
         slider.max = window.innerWidth - 34;
         slider.value = Number(slider.min) + nValue * (Number(slider.max) - Number(slider.min));
-        slider.oninput();
+        slider.max = window.innerWidth - 34
+        */
+        maxWidth = window.innerWidth - mwm
+        resize()
     }
-    slider.max = window.innerWidth - 34;
-    slider.oninput = function () {
-        for (const el of document.getElementsByClassName('imgel')) el.width = slider.value
-        document.getElementById("preview_size").innerText = slider.value
-    }
+    /*
+        slider.oninput = () => {
+            count = slider.value
+            resize()
+        }
+
+        slider.max = 10
+        slider.min = 1
+    */
+    setTimeout(() => resize(), 1000)
+
 </script>
 <H1>CLICK TO COPY URL TO CLIPBOARD</H1>
 <!-- need file list with preview -->
