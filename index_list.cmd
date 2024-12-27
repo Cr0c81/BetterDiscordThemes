@@ -13,7 +13,7 @@ set DIR=%1
 cd %DIR%
 dir *.jpg *.png *.jpeg /b /O:N > filelist.txt
 echo ^<details^>^<summary^>%DIR%^</summary^> >>..\index.html
-for /F "eol=; tokens=*" %%i in (filelist.txt) do echo ^<table style="display:inline-grid;" class="imgtd"^>^<tr^>^<th^>^<img src=%DIR%/%%i width=256px onclick=CopyToClipboard("%DIR%/%%i") class="imgel"^>^</th^>^</tr^>^<tr^>^<th class="textdesc"^>%%i^</th^>^</tr^>^</tr^>^</table^> >>..\index.html
+for /F "eol=; tokens=*" %%i in (filelist.txt) do echo ^<table style="display:inline-grid;" class="imgtd"^>^<tr^>^<th^>^<img src="%DIR%/%%i" width=256px onclick=CopyToClipboard("%DIR%/%%i") class="imgel"^>^</th^>^</tr^>^<tr^>^<th class="textdesc"^>%%i^</th^>^</tr^>^</tr^>^</table^> >>..\index.html
 echo ^</details^> >>..\index.html
 del filelist.txt
 cd..
