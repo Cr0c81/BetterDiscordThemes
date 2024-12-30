@@ -14,6 +14,7 @@ SETLOCAL
 set DIR=%1
 cd %DIR%
 dir *.jpg *.png *.jpeg /b /O:N>..\%1.html
+if exist preview del /F /Q preview\*.*
 if NOT exist preview mkdir preview
 for /F "eol=; tokens=*" %%i in (..\%1.html) do CALL :convert %1 %%i
 cd..
