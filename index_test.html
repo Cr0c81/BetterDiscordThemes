@@ -218,6 +218,14 @@ Preview size
 `
     }
 
+    function GetUrls(dir, name) {
+        return {
+            full: `./${dir}/${name}`,
+            preview: `./${dir}/preview/${name}`,
+            name: `${name}`,
+        }
+    }
+
     window.onresize = () => {
         maxWidth = window.innerWidth - mwm
         resize()
@@ -227,19 +235,18 @@ Preview size
     fetch("./dirs.html")
         .then(r => r.text())
         .then(r => {
-            console.log(r)
             let dirs = r.split("\n")
-            console.log(dirs)
             for (const dir of dirs) {
+                if (dir === "") continue
                 let html = GetTab1().replace("%TEXT%", dir)
                 fetch("./" + dir + ".html")
                     .then(r => r.text())
                     .then(r => {
-                        console.log(r)
                         let files = r.split("\n")
-                        console.log(files)
                         for (const file of files) {
-                            html += files + "<br>"
+                            if (file === "") continue
+                            var urls = GetUrls(dir, file)
+                            html += GetRecord().replace("%previewpath%", urls.preview).replace("%path%", urls.full).replace("%name%", urls.name)
                         }
                     })
                 html += GetTab2()
