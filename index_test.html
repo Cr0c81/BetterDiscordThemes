@@ -257,8 +257,8 @@ Preview size
 
     function FetchDirIter() {
         if (dirIndex === dirs.length) return
-        if (dir[dirIndex] === "") FetchDir()
-        FetchDir(dirs[dirIndex++], FetchDir)
+        if (dirs[dirIndex] === "") FetchDirIter()
+        FetchDir(dirs[dirIndex++], FetchDirIter)
     }
 
     fetch("./dirs.html")
