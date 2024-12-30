@@ -232,29 +232,40 @@ Preview size
     }
     setTimeout(() => resize(), 1000)
 
-    fetch("./dirs.html")
-        .then(r => r.text())
-        .then(r => {
-            let dirs = r.split("\n")
-            for (const dir of dirs) {
-                if (dir === "") continue
+    function FetchDir(dir, callback) {
+        fetch("./" + dir + ".html")
+            .then(r => r.text())
+            .then(r => {
                 let html = GetTab1(dir)
-                fetch("./" + dir + ".html")
-                    .then(r => r.text())
-                    .then(r => {
-                        let files = r.split("\n")
-                        for (const file of files) {
-                            if (file === "") continue
-                            var urls = GetUrls(dir, file)
-                            let rec = GetRecord(urls.preview, urls.full, urls.name)
-                            html += rec
-                            console.log(rec)
-                        }
-                    })
+                let files = r.split("\n")
+                for (const file of files) {
+                    if (file === "") continue
+                    var urls = GetUrls(dir, file)
+                    let rec = GetRecord(urls.preview, urls.full, urls.name)
+                    html += rec
+                    console.log(rec)
+                }
                 html += GetTab2()
                 document.body.innerHTML += html;
                 console.log(html)
-            }
+                callback()
+            })
+    }
+
+    let dirs = []
+    let dirIndex = 0
+
+    function FetchDirIter() {
+        if (dirIndex === dirs.length) return
+        if (dir[dirIndex] === "") FetchDir()
+        FetchDir(dirs[dirIndex++], FetchDir)
+    }
+
+    fetch("./dirs.html")
+        .then(r => r.text())
+        .then(r => {
+            dirs = r.split("\n")
+            FetchDirIter()
         })
 
 </script>
