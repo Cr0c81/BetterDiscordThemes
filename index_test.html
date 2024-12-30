@@ -224,13 +224,13 @@ Preview size
     }
     setTimeout(() => resize(), 1000)
 
-    fetch("./_data/dirs.html")
+    fetch("./dirs.html")
         .then(r => r.text())
         .then(r => {
             let dirs = r.split("\r\n")
             for (const dir of dirs) {
                 let html = GetTab1().replace("%TEXT%", dir)
-                fetch("./_data/" + dir + ".htmlt")
+                fetch("./" + dir + ".html")
                     .then(r => r.text())
                     .then(r => {
                         let files = r.split("\r\n")
