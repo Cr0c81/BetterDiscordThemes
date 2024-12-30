@@ -205,15 +205,15 @@ Preview size
         window.open(path, '_blank').focus();
     }
     
-    function GetTab1() {return `<details><summary>%TEXT%</summary>`}
+    function GetTab1(name) {return `<details><summary>${name}</summary>`}
 
     function GetTab2() {return `</details>`}
 
-    function GetRecord() {
+    function GetRecord(preview, full, name) {
         return `
 <table style="display:inline-grid;" class="imgtd">
-    <tr><th><img src="%previewpath%" width=256px onclick=ClickImage("%path%") class="imgel"></th></tr>
-    <tr><th class="textdesc">%name%</th></tr></tr>
+    <tr><th><img src="${preview}" width=256px onclick=ClickImage("${full}") class="imgel"></th></tr>
+    <tr><th class="textdesc">${name}</th></tr></tr>
 </table>
 `
     }
@@ -238,7 +238,7 @@ Preview size
             let dirs = r.split("\n")
             for (const dir of dirs) {
                 if (dir === "") continue
-                let html = GetTab1().replace("%TEXT%", dir)
+                let html = GetTab1(dir)
                 fetch("./" + dir + ".html")
                     .then(r => r.text())
                     .then(r => {
@@ -246,11 +246,12 @@ Preview size
                         for (const file of files) {
                             if (file === "") continue
                             var urls = GetUrls(dir, file)
-                            html += GetRecord().replace("%previewpath%", urls.preview).replace("%path%", urls.full).replace("%name%", urls.name)
+                            html += GetRecord(urls.preview, urls.full, urls.name)
                         }
                     })
                 html += GetTab2()
                 document.body.innerHTML += html;
+                console.log(html)
             }
         })
 
