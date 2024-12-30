@@ -1,6 +1,5 @@
 @echo off
 set iview=d:\Total Commander\IrfanView\i_view64.exe
-type index0.html>index.html
 dir /A:D /B > dirs_temp.txt
 del _data\dirs.html
 for /F "eol=; tokens=*" %%i in (dirs_temp.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" IF NOT "%%i"=="_data" CALL :create_filelist %%i
