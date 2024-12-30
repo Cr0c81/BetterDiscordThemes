@@ -228,7 +228,7 @@ Preview size
         .then(r => r.text())
         .then(r => {
             console.log(r)
-            let dirs = r.split("\r\n")
+            let dirs = r.split("\n")
             console.log(dirs)
             for (const dir of dirs) {
                 let html = GetTab1().replace("%TEXT%", dir)
@@ -236,7 +236,7 @@ Preview size
                     .then(r => r.text())
                     .then(r => {
                         console.log(r)
-                        let files = r.split("\r\n")
+                        let files = r.split("\n")
                         console.log(files)
                         for (const file of files) {
                             html += files + "<br>"
