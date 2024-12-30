@@ -2,22 +2,21 @@
 set iview=d:\Total Commander\IrfanView\i_view64.exe
 type index0.html>index.html
 dir /A:D /B > dirs_temp.txt
-del _data\dirs.txt
+del _data\dirs.html
 for /F "eol=; tokens=*" %%i in (dirs_temp.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" IF NOT "%%i"=="_data" CALL :create_filelist %%i
 
-type index1.html>>index.html
 del dirs_temp.txt
 goto exit
 
 :create_filelist
 echo %1
-echo %1>>_data\dirs.txt
+echo %1>>_data\dirs.html
 SETLOCAL
 set DIR=%1
 cd %DIR%
-dir *.jpg *.png *.jpeg /b /O:N>..\_data\%1.txt
+dir *.jpg *.png *.jpeg /b /O:N>..\_data\%1.html
 if NOT exist preview mkdir preview
-for /F "eol=; tokens=*" %%i in (..\_data\%1.txt) do CALL :convert %1 %%i
+for /F "eol=; tokens=*" %%i in (..\_data\%1.html) do CALL :convert %1 %%i
 cd..
 ENDLOCAL
 
