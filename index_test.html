@@ -214,7 +214,7 @@ Preview size
 <table style="display:inline-grid;" class="imgtd">
     <tr><th><img src="${preview}" width=256px onclick=ClickImage("${full}") class="imgel"></th></tr>
     <tr><th class="textdesc">${name}</th></tr></tr>
-</table>
+</table>\n
 `
     }
 
@@ -246,7 +246,9 @@ Preview size
                         for (const file of files) {
                             if (file === "") continue
                             var urls = GetUrls(dir, file)
-                            html += GetRecord(urls.preview, urls.full, urls.name)
+                            let rec = GetRecord(urls.preview, urls.full, urls.name)
+                            html += rec
+                            console.log(rec)
                         }
                     })
                 html += GetTab2()
