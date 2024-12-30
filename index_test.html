@@ -86,25 +86,23 @@
             r = 0;
             g = c;
             b = x;
-        } else if (h < 240) r = 0;
-        g = x;
-        b = c;
-    }
-
-    else
-    if (h < 300) {
-        r = x;
-        g = 0;
-        b = c;
-    } else {
-        r = c;
-        g = 0;
-        b = x;
-    }
-    r = normalize_rgb_value(r, m);
-    g = normalize_rgb_value(g, m);
-    b = normalize_rgb_value(b, m);
-    return rgbToHex(r, g, b);
+        } else if (h < 240) {
+            r = 0;
+            g = x;
+            b = c;
+        } else if (h < 300) {
+            r = x;
+            g = 0;
+            b = c;
+        } else {
+            r = c;
+            g = 0;
+            b = x;
+        }
+        r = normalize_rgb_value(r, m);
+        g = normalize_rgb_value(g, m);
+        b = normalize_rgb_value(b, m);
+        return rgbToHex(r, g, b);
     }
 
     function normalize_rgb_value(color, m) {
@@ -237,11 +235,11 @@ Preview size
                     .then(r => {
                         let files = r.split("\r\n")
                         for (const file of files) {
-                            html+= files+"<br>"
+                            html += files + "<br>"
                         }
                     })
-                html+=GetTab2()
-                document.body.innerHTML+=html;
+                html += GetTab2()
+                document.body.innerHTML += html;
             }
         })
 
