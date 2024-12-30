@@ -185,7 +185,7 @@ Preview size
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
     var mwm = 30
     var maxWidth = window.innerWidth - mwm
-    var count = 4
+    var count = 10
 
     function resize(cnt) {
         if (cnt === undefined) cnt = count
@@ -258,7 +258,7 @@ Preview size
     function FetchDirIter() {
         if (dirIndex === dirs.length) return
         if (dirs[dirIndex] === "") FetchDirIter()
-        FetchDir(dirs[dirIndex++], FetchDirIter)
+        FetchDir(dirs[dirIndex++], () => FetchDirIter())
     }
 
     fetch("./dirs.html")
