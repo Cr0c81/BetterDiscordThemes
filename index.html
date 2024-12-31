@@ -7,6 +7,17 @@
     .textdesc {
         max-width: 128px;
         word-wrap: break-word;
+        font-weight: 400;
+    }
+
+    .info {
+        max-width: 128px;
+        word-wrap: break-word;
+        font-weight: 400;
+    }
+
+    .summary {
+        font-size: 2em;
     }
 </style>
 <body style="">
@@ -194,6 +205,7 @@ Preview size
         for (const el of document.getElementsByClassName('imgel')) el.width = w
         for (const el of document.getElementsByClassName('imgtd')) el.width = w
         for (const el of document.getElementsByClassName("textdesc")) el.style.maxWidth = w
+        for (const el of document.getElementsByClassName("info")) el.style.maxWidth = w
     }
 
     function CopyToClipboard(text) {
@@ -205,7 +217,7 @@ Preview size
         window.open(path, '_blank').focus();
     }
     
-    function GetTab1(name) {return `<details id="${name}"><summary>${name}</summary>`}
+    function GetTab1(name) {return `<details id="${name}"><summary class="summary">${name}</summary>`}
 
     function GetTab2() {return `</details>`}
 
