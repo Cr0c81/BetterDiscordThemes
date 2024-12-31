@@ -205,7 +205,7 @@ Preview size
         window.open(path, '_blank').focus();
     }
     
-    function GetTab1(name) {return `<details><summary>${name}</summary>`}
+    function GetTab1(name) {return `<details id="${name}"><summary>${name}</summary>`}
 
     function GetTab2() {return `</details>`}
 
@@ -233,37 +233,21 @@ Preview size
     }
     setTimeout(() => resize(), 1000)
 
-    function FetchDir(dir, callback) {
-        fetch("./" + dir + ".html")
-            .then(r => r.text())
-            .then(r => {
-                let html = GetTab1(dir)
-                let files = r.split("\n")
-                for (const file of files) {
-                    if (file === "") continue
-                    var urls = GetUrls(dir, file)
-                    let rec = GetRecord(urls.preview, urls.full, urls.name)
-                    html += rec
-                    console.log(rec)
-                }
-                html += GetTab2()
-                document.body.innerHTML += html;
-                console.log(html)
-                callback()
-            })
-    }
+    var dirs = []
 
     fetch("./images.html")
         .then(r => r.text())
         .then(r => {
             dirs = JSON.parse(r)
-            console.log("[]", dirs)
+            //console.log("[]", dirs)
             for (const dir of dirs) {
+                dir.html = ""
                 let html = GetTab1(dir.name)
                 for (const file of dir.files)
-                    html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
+                    dir.html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
                 html += GetTab2()
                 document.body.innerHTML += html
+                dir.element = document.getElementById(dir.name)
             }
         })
 
