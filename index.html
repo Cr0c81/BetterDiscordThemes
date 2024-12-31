@@ -232,40 +232,11 @@ Preview size
     }
     setTimeout(() => resize(), 1000)
 
-    function FetchDir(dir, callback) {
-        fetch("./" + dir + ".html")
-            .then(r => r.text())
-            .then(r => {
-                let html = GetTab1(dir)
-                let files = r.split("\n")
-                for (const file of files) {
-                    if (file === "") continue
-                    var urls = GetUrls(dir, file)
-                    let rec = GetRecord(urls.preview, urls.full, urls.name)
-                    html += rec
-                    console.log(rec)
-                }
-                html += GetTab2()
-                document.body.innerHTML += html;
-                console.log(html)
-                callback()
-            })
-    }
-
-    var dirs = []
-    var dirIndex = 0
-
-    function FetchDirIter() {
-        if (dirIndex === dirs.length) return
-        if (dirs[dirIndex] === "") FetchDirIter()
-        FetchDir(dirs[dirIndex++], () => FetchDirIter())
-    }
-
-    fetch("./dirs.html")
+    fetch("./images.html")
         .then(r => r.text())
         .then(r => {
-            dirs = r.split("\n")
-            FetchDirIter()
+            dirs = JSON.parse(r)
+            console.log("[]", dirs)
         })
 
 </script>
