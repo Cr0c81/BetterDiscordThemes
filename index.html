@@ -209,11 +209,12 @@ Preview size
 
     function GetTab2() {return `</details>`}
 
-    function GetRecord(preview, full, name) {
+    function GetRecord(preview, full, name, size, resolution) {
         return `
 <table style="display:inline-grid;" class="imgtd">
     <tr><th><img src="${preview}" width=256px onclick=ClickImage("${full}") class="imgel"></th></tr>
     <tr><th class="textdesc">${name}</th></tr></tr>
+    <tr><th class="info">${resolution} :: ${size}</th></tr></tr>
 </table>\n
 `
     }
@@ -232,11 +233,38 @@ Preview size
     }
     setTimeout(() => resize(), 1000)
 
+    function FetchDir(dir, callback) {
+        fetch("./" + dir + ".html")
+            .then(r => r.text())
+            .then(r => {
+                let html = GetTab1(dir)
+                let files = r.split("\n")
+                for (const file of files) {
+                    if (file === "") continue
+                    var urls = GetUrls(dir, file)
+                    let rec = GetRecord(urls.preview, urls.full, urls.name)
+                    html += rec
+                    console.log(rec)
+                }
+                html += GetTab2()
+                document.body.innerHTML += html;
+                console.log(html)
+                callback()
+            })
+    }
+
     fetch("./images.html")
         .then(r => r.text())
         .then(r => {
             dirs = JSON.parse(r)
             console.log("[]", dirs)
+            for (const dir of dirs) {
+                let html = GetTab1(dir.name)
+                for (const file of dir.files)
+                    html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
+                html += GetTab2()
+                document.body.innerHTML += html
+            }
         })
 
 </script>
