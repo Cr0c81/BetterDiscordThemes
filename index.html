@@ -257,6 +257,7 @@ Preview size
                 let html = GetTab1(dir.name)
                 for (const file of dir.files)
                     dir.html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
+                html += dir.html
                 html += GetTab2()
                 document.body.innerHTML += html
                 dir.element = document.getElementById(dir.name)
