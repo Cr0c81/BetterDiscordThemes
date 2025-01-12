@@ -5,6 +5,7 @@ del dirs.html
 for /F "eol=; tokens=*" %%i in (dirs_temp.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" IF NOT "%%i"=="_data" CALL :create_filelist %%i
 
 del dirs_temp.txt
+imglist.exe
 goto exit
 
 :create_filelist
