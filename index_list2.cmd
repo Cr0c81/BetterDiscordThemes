@@ -6,6 +6,7 @@ for /F "eol=; tokens=*" %%i in (dirs_temp.txt) do if NOT "%%i"==".idea" if NOT "
 
 del dirs_temp.txt
 imglist.exe
+del dirs.html
 goto exit
 
 :create_filelist
@@ -18,6 +19,7 @@ dir *.jpg *.png *.jpeg /b /O:N>..\%1.html
 if exist preview del /F /Q preview\*.*
 if NOT exist preview mkdir preview
 for /F "eol=; tokens=*" %%i in (..\%1.html) do CALL :convert %1 %%i
+del ..\%1.html
 cd..
 ENDLOCAL
 

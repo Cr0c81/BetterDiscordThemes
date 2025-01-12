@@ -251,7 +251,7 @@ Preview size
         .then(r => r.text())
         .then(r => {
             dirs = JSON.parse(r)
-            //console.log("[]", dirs)
+            console.log(dirs)
             for (const dir of dirs) {
                 dir.html = ""
                 let html = GetTab1(dir.name)
