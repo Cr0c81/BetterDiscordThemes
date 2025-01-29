@@ -3,15 +3,30 @@
 <head>
     <meta charset="utf-8">
 </head>
-<style> 
-@font-face {
-   font-family: myFirstFont;
-   src: url(./fonts/bloggersans/BloggerSans-Medium.woff);
-}
+<style>
+    @font-face {
+        font-family: _BloggerSansMedium;
+        src: url(./fonts/bloggersans/blogger-sans-medium.ttf);
+    }
 
-* {
-   font-family: myFirstFont;
-}
+    @font-face {
+        font-family: _BloggerSans;
+        src: url(./fonts/bloggersans/blogger-sans.ttf);
+    }
+
+    @font-face {
+        font-family: _FiraSans;
+        src: url(./fonts/bloggersans/firasans-regular.ttf);
+    }
+
+    @font-face {
+        font-family: _FiraSansMedium;
+        src: url(./fonts/bloggersans/firasans-medium.ttf);
+    }
+
+    * {
+        font-family: _FiraSans;
+    }
 </style>
 <style>
     .textdesc {
@@ -34,16 +49,17 @@
 <body style="">
 <details>
     <summary>BB colored text</summary>
-    <input id="text_string" type="text" value="sample text" style="width: 25%">
+    <input id="text_string" style="width: 25%" type="text" value="sample text">
     <input id="color0" type="color" value="#000000">
     <input id="color1" type="color" value="#ffffff">
     <input id="text_type" type="checkbox">Random color
     <br><br>
     <input id="color_generate" type="button" value="Generate">
     <br><br>
-    <input id="text_result" type="text" style="width: 100%">
+    <input id="text_result" style="width: 100%" type="text">
 </details>
 
+<!--COLORED BB TEXT-->
 <script type="text/javascript">
     // COLOR HUE
     // Changes the RGB/HEX temporarily to a HSL-Value, modifies that value
@@ -135,7 +151,9 @@
         return color;
     }
 
-    function rgbToHex(r, g, b) { return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1); }
+    function rgbToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
 
     //
 
@@ -144,13 +162,27 @@
     const splitColorToRGB = (string) => {
         return [Number('0x' + string[1] + string[2]), Number('0x' + string[3] + string[4]), Number('0x' + string[5] + string[6])]
     }
-    const RGBToColor = (array) => { return `#${NumToHex(array[0])}${NumToHex(array[1])}${NumToHex(array[2])}` }
-    const text = () => { return document.getElementById("text_string").value}
-    const Result = (value) => { return document.getElementById("text_result").value = value}
-    const color0 = () => { return document.getElementById("color0").value}
-    const color1 = () => { return document.getElementById("color1").value}
-    const textType = () => { return document.getElementById("text_type").checked}
-    const Lerp = (a, b, t) => {return a + (b - a) * t}
+    const RGBToColor = (array) => {
+        return `#${NumToHex(array[0])}${NumToHex(array[1])}${NumToHex(array[2])}`
+    }
+    const text = () => {
+        return document.getElementById("text_string").value
+    }
+    const Result = (value) => {
+        return document.getElementById("text_result").value = value
+    }
+    const color0 = () => {
+        return document.getElementById("color0").value
+    }
+    const color1 = () => {
+        return document.getElementById("color1").value
+    }
+    const textType = () => {
+        return document.getElementById("text_type").checked
+    }
+    const Lerp = (a, b, t) => {
+        return a + (b - a) * t
+    }
     const NumToHex = (value) => {
         let res = value.toString(16)
         if (res.length < 2) res = '0' + res
@@ -186,11 +218,42 @@
 </script>
 
 <br><br>
+<!--FONTS-->
+<H1>
+    <a href="./fonts/fonts.zip">FONTS</a>
+</H1>
 <!--
-Preview size
-<input type="range" min="1" max="10" value="2" class="slider" id="preview_size_slider">
-<label id="preview_size">2</label> items
+<div id="fonts_collection"></div>
+<button id="font_prefab" style="display: none;">item</button>
+
+<script defer>
+    const fonts = [
+        '_BloggerSans', '_BloggerSansMedium',
+        '_FiraSans', '_FiraSansMedium',
+    ]
+
+    function setfont(index) {
+        //document.body.style.fontFamily = fonts[index]
+        document.styleSheets[0].cssRules[document.styleSheets[0].cssRules.length-1].cssText=`* { font-family: ${fonts[index]}; }`
+    }
+
+    let prefab = document.getElementById('font_prefab')
+    let parent = document.getElementById('fonts_collection')
+    let fc = 0
+    for (const font of fonts) {
+        let clone = prefab.cloneNode(true)
+        clone.removeAttribute('id')
+        clone.onclick = setfont(fc)
+        clone.style.display = "block"
+        clone.innerText = fonts[fc]
+        parent.appendChild(clone)
+        fc++
+    }
+</script>
+<br><br>
 -->
+
+<!--IMAGES-->
 <button id="b1" onclick=resize(1)> 1 item</button>
 <button id="b2" onclick=resize(2)> 2 item</button>
 <button id="b3" onclick=resize(3)> 3 item</button>
@@ -227,10 +290,14 @@ Preview size
     function ClickImage(path) {
         window.open(path, '_blank').focus();
     }
-    
-    function GetTab1(name) {return `<details id="${name}"><summary class="summary">${name}</summary>`}
 
-    function GetTab2() {return `</details>`}
+    function GetTab1(name) {
+        return `<details id="${name}"><summary class="summary">${name}</summary>`
+    }
+
+    function GetTab2() {
+        return `</details>`
+    }
 
     function GetRecord(preview, full, name, size, resolution) {
         return `
