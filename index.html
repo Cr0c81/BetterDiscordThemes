@@ -29,6 +29,28 @@
     }
 </style>
 <style>
+    table {
+        display: inline-table;
+        border-collapse: collapse;
+        margin: 0 auto 5px auto;
+    }
+
+    td {
+        border: 1px solid #ddd;
+        padding: 1px;
+        text-align: center;
+        max-width: 1000px;
+    }
+
+    .imgtd {
+    }
+
+    .imgel {
+        width: 100%; /* Растягиваем на всю ширину ячейки */
+        height: auto; /* Сохраняем пропорции */
+        display: block;
+    }
+
     .textdesc {
         max-width: 128px;
         word-wrap: break-word;
@@ -36,9 +58,11 @@
     }
 
     .info {
-        max-width: 128px;
+        /*max-width: 128px;*/
         word-wrap: break-word;
         font-weight: 400;
+        width: 100px;
+        /*display: inline;*/
     }
 
     .summary {
@@ -276,10 +300,8 @@
         if (cnt === undefined) cnt = count
         else count = cnt
         let w = Math.floor(maxWidth / cnt) - 5
-        for (const el of document.getElementsByClassName('imgel')) el.width = w
-        for (const el of document.getElementsByClassName('imgtd')) el.width = w
-        for (const el of document.getElementsByClassName("textdesc")) el.style.maxWidth = w
-        for (const el of document.getElementsByClassName("info")) el.style.maxWidth = w
+        for (const el of document.getElementsByClassName('imgtd')) el.width = w - 5
+        for (const el of document.getElementsByClassName('textdesc')) el.width = w - 2
     }
 
     function CopyToClipboard(text) {
@@ -301,11 +323,15 @@
 
     function GetRecord(preview, full, name, size, resolution) {
         return `
-<table style="display:inline-grid;" class="imgtd">
-    <tr><th><img src="${preview}" width=256px onclick=ClickImage("${full}") class="imgel"></th></tr>
-    <tr><th class="textdesc">${name}</th></tr></tr>
-    <tr><th class="info">${resolution} :: ${size}</th></tr></tr>
-</table>\n
+    <table class="imgtd" width="512px">
+        <tr><td colspan="2"><img class="imgel" src="${preview}" onclick=ClickImage("${full}")></td></tr>
+        <tr><td colspan="2" class="textdesc">${name}</td></tr>
+        <tr>
+            <td width="50%" class="info">${resolution}</td>
+            <td width="50%" class="info">${size}</td>
+        </tr>
+    </table>
+
 `
     }
 
