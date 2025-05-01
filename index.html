@@ -315,13 +315,15 @@
     }
 
     function GetRecord(preview, full, name, size, resolution) {
+        size = Number.parseInt(size)
+        if (size > 999) size = `${Math.floor(size / 1000)} ${size % 1000}`
         return `
     <table class="imgtd" width="512px">
         <tr><td colspan="2"><img class="imgel" src="${preview}" onclick=ClickImage("${full}")></td></tr>
         <tr><td colspan="2" class="textdesc">${name}</td></tr>
         <tr>
             <td width="50%" class="info">${resolution}</td>
-            <td width="50%" class="info">${size}</td>
+            <td width="50%" class="info">${size} Kb</td>
         </tr>
     </table>
 

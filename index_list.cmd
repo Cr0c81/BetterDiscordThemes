@@ -1,22 +1,30 @@
-echo off
-type index0.html>index.html
-dir /A:D /B > dirs.txt
-for /F "eol=; tokens=*" %%i in (dirs.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" CALL :create_filelist %%i
+@echo off
+set iview=d:\Total Commander\IrfanView\i_view64.exe
+dir /A:D /B > dirs_temp.txt
+del dirs.html
+for /F "eol=; tokens=*" %%i in (dirs_temp.txt) do if NOT "%%i"==".idea" if NOT "%%i"=="fonts" if NOT "%%i"==".git" if NOT "%%i"=="iptv" IF NOT "%%i"=="_data" CALL :create_filelist %%i
 
-type index1.html>>index.html
-del dirs.txt
+del dirs_temp.txt
+imglist.exe
+del dirs.html
 goto exit
 
 :create_filelist
+echo %1
+echo %1>>dirs.html
 SETLOCAL
 set DIR=%1
 cd %DIR%
-dir *.jpg *.png *.jpeg /b /O:N > filelist.txt
-echo ^<details^>^<summary^>%DIR%^</summary^> >>..\index.html
-for /F "eol=; tokens=*" %%i in (filelist.txt) do echo ^<table style="display:inline-grid;" class="imgtd"^>^<tr^>^<th^>^<img src="%DIR%/%%i" width=256px onclick=CopyToClipboard("%DIR%/%%i") class="imgel"^>^</th^>^</tr^>^<tr^>^<th class="textdesc"^>%%i^</th^>^</tr^>^</tr^>^</table^> >>..\index.html
-echo ^</details^> >>..\index.html
-del filelist.txt
+dir *.jpg *.png *.jpeg /b /O:N>..\%1.html
+if exist preview del /F /Q preview\*.*
+if NOT exist preview mkdir preview
+for /F "eol=; tokens=*" %%i in (..\%1.html) do CALL :convert %1 %%i
+del ..\%1.html
 cd..
 ENDLOCAL
 
 :exit
+
+:convert
+SET var=%cd%
+if NOT ["%2"]==[""] "%iview%" %var%\%2 /silent /resize_long=512 /resample /aspectratio /convert="%var%\preview\%2"
