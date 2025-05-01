@@ -65,7 +65,7 @@
         /*display: inline;*/
     }
 
-    .summary {
+    .summaryText {
         font-size: 2em;
     }
 </style>
@@ -299,6 +299,7 @@
     function resize(cnt) {
         if (cnt === undefined) cnt = count
         else count = cnt
+        count = cnt
         let w = Math.floor(maxWidth / cnt) - 5
         for (const el of document.getElementsByClassName('imgtd')) el.width = w - 5
         for (const el of document.getElementsByClassName('textdesc')) el.width = w - 2
@@ -311,14 +312,6 @@
 
     function ClickImage(path) {
         window.open(path, '_blank').focus();
-    }
-
-    function GetTab1(name) {
-        return `<details id="${name}"><summary class="summary">${name}</summary>`
-    }
-
-    function GetTab2() {
-        return `</details>`
     }
 
     function GetRecord(preview, full, name, size, resolution) {
@@ -343,6 +336,30 @@
         }
     }
 
+    /**
+     * Clear DETAILS element
+     * @param {HTMLElement} detail
+     */
+    function ClearsDetail(detail) {
+        let c = Array.from(detail.children)
+        for (const e of c) {
+            if (e.className === 'imgtd')
+                detail.removeChild(e)
+        }
+    }
+
+    /**
+     *
+     * @param {HTMLElement} detail
+     * @param {object}dir
+     */
+    function FillDetail(detail, dir) {
+        dir.html = ""
+        for (const file of dir.files)
+            dir.html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
+        detail.innerHTML += dir.html
+    }
+
     window.onresize = () => {
         maxWidth = window.innerWidth - mwm
         resize()
@@ -357,14 +374,23 @@
             dirs = JSON.parse(r)
             console.log(dirs)
             for (const dir of dirs) {
-                dir.html = ""
-                let html = GetTab1(dir.name)
-                for (const file of dir.files)
-                    dir.html += GetRecord(`./${dir.name}/preview/${file.filename}`, `./${dir.name}/${file.filename}`, file.name, file.size, file.resolution)
-                html += dir.html
-                html += GetTab2()
-                document.body.innerHTML += html
-                dir.element = document.getElementById(dir.name)
+                let detail = document.createElement('details')
+                detail.id = dir.name
+                let summary = document.createElement('summary')
+                summary.innerText = dir.name
+                summary.className = 'summaryText'
+                detail.appendChild(summary)
+                document.body.appendChild(detail)
+                dir.element = detail
+                dir.element.addEventListener("toggle", (event) => {
+                    //console.log("toggle", dir.element)
+                    if (dir.element.open) {
+                        FillDetail(dir.element, dir)
+                        resize()
+                    } else {
+                        ClearsDetail(dir.element)
+                    }
+                });
             }
         })
 
