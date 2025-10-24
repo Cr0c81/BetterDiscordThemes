@@ -1,9 +1,7 @@
 @font-face {
     font-family: 'Blogger Sans';
-    src: local('Blogger Sans Medium'), local('Blogger-Sans-Medium'),
-        url('BloggerSans-Medium.woff2') format('woff2'),
-        url('BloggerSans-Medium.woff') format('woff'),
-        url('BloggerSans-Medium.ttf') format('truetype');
+    src: url('blogger-sans-regular.ttf') format('truetype'),
+         ('firasans-regular.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
   }

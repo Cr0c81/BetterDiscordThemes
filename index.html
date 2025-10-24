@@ -24,17 +24,20 @@
         src: url(./fonts/bloggersans/firasans-medium.ttf);
     }
 
-    * {
-        font-family: _FiraSans;
+    @font-face {
+        font-family: _FiraSansLight;
+        src: url(./fonts/bloggersans/firasans-light.ttf);
     }
 </style>
 <style>
+    /* 0 */
     table {
         display: inline-table;
         border-collapse: collapse;
         margin: 0 auto 5px auto;
     }
 
+    /* 1 */
     td {
         border: 1px solid #ddd;
         padding: 1px;
@@ -42,15 +45,18 @@
         max-width: 1000px;
     }
 
+    /* 2 */
     .imgtd {
     }
 
+    /* 3 */
     .imgel {
         width: 100%; /* Растягиваем на всю ширину ячейки */
         height: auto; /* Сохраняем пропорции */
         display: block;
     }
 
+    /* 4 */
     .textdesc {
         max-width: 128px;
         word-wrap: break-word;
@@ -68,9 +74,17 @@
     .summaryText {
         font-size: 2em;
     }
+
+    body {
+        font-family: "Fira Code Retina";
+    }
+
+    .button1 {
+        font-family: "Fira Code Retina";
+    }
 </style>
 
-<body style="">
+<body class="body">
 <details>
     <summary>BB colored text</summary>
     <input id="text_string" style="width: 25%" type="text" value="sample text">
@@ -256,19 +270,54 @@
 <H1>
     <a href="./fonts/fonts.zip">FONTS</a>
 </H1>
-<!--
-<div id="fonts_collection"></div>
+<div id="fonts_collection" style="display: inline-flex;"></div>
 <button id="font_prefab" style="display: none;">item</button>
+
+<script>
+    class Cookie {
+        /**
+         * Get cookie by name
+         * @param {string}name
+         * @returns {null|string}
+         */
+        static getCookie(name) {
+            name = name + "=";
+            let ca = decodeURIComponent(document.cookie).split(';')
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trimStart()
+                if (c.startsWith(name))
+                    return c.substring(name.length, c.length)
+            }
+            return null
+        }
+
+        /**
+         * Set cookie with expires time
+         * @param {string}name - name
+         * @param {string}value - value
+         * @param {number}days - days to expire
+         */
+        static setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+    }
+</script>
 
 <script defer>
     const fonts = [
         '_BloggerSans', '_BloggerSansMedium',
-        '_FiraSans', '_FiraSansMedium',
+        '_FiraSans', '_FiraSansMedium', '_FiraSansLight'
     ]
 
     function setfont(index) {
         //document.body.style.fontFamily = fonts[index]
-        document.styleSheets[0].cssRules[document.styleSheets[0].cssRules.length-1].cssText=`* { font-family: ${fonts[index]}; }`
+        // 7-8
+        document.styleSheets[1].cssRules[7].style.fontFamily = fonts[index]
+        document.styleSheets[1].cssRules[8].style.fontFamily = fonts[index]
+        Cookie.setCookie("fontindex", index, 365)
     }
 
     let prefab = document.getElementById('font_prefab')
@@ -277,34 +326,39 @@
     for (const font of fonts) {
         let clone = prefab.cloneNode(true)
         clone.removeAttribute('id')
-        clone.onclick = setfont(fc)
+        let ff = fc
+        clone.onclick = () => setfont(ff)
         clone.style.display = "block"
-        clone.innerText = fonts[fc]
+        clone.innerText = fonts[ff]
+        clone.style.fontFamily = fonts[ff]
         parent.appendChild(clone)
         fc++
     }
+    if (Cookie.getCookie("fontindex") == null)
+        setfont(0)
+    else
+        setfont(Cookie.getCookie("fontindex"))
 </script>
 <br><br>
--->
 
 <!--IMAGES-->
-<button id="b1" onclick=resize(1)> 1 item</button>
-<button id="b2" onclick=resize(2)> 2 item</button>
-<button id="b3" onclick=resize(3)> 3 item</button>
-<button id="b4" onclick=resize(4)> 4 item</button>
-<button id="b5" onclick=resize(5)> 5 item</button>
-<button id="b6" onclick=resize(6)> 6 item</button>
-<button id="b7" onclick=resize(7)> 7 item</button>
-<button id="b8" onclick=resize(8)> 8 item</button>
-<button id="b9" onclick=resize(9)> 9 item</button>
-<button id="b10" onclick=resize(10)> 10 item</button>
+<button class="button1" id="b1" onclick=resize(1)> 1 item</button>
+<button class="button1" id="b2" onclick=resize(2)> 2 item</button>
+<button class="button1" id="b3" onclick=resize(3)> 3 item</button>
+<button class="button1" id="b4" onclick=resize(4)> 4 item</button>
+<button class="button1" id="b5" onclick=resize(5)> 5 item</button>
+<button class="button1" id="b6" onclick=resize(6)> 6 item</button>
+<button class="button1" id="b7" onclick=resize(7)> 7 item</button>
+<button class="button1" id="b8" onclick=resize(8)> 8 item</button>
+<button class="button1" id="b9" onclick=resize(9)> 9 item</button>
+<button class="button1" id="b10" onclick=resize(10)> 10 item</button>
 
 <br><br>
 <script defer>
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
     var mwm = 30
     var maxWidth = window.innerWidth - mwm
-    var count = 10
+    var count = Cookie.getCookie("imagecount") ?? 10
 
     function resize(cnt) {
         if (cnt === undefined) cnt = count
@@ -313,6 +367,7 @@
         let w = Math.floor(maxWidth / cnt) - 5
         for (const el of document.getElementsByClassName('imgtd')) el.width = w - 5
         for (const el of document.getElementsByClassName('textdesc')) el.width = w - 2
+        Cookie.setCookie("imagecount", cnt, 365)
     }
 
     function CopyToClipboard(text) {
@@ -405,7 +460,7 @@
         }
     }
 
-    fetch("./images.html").then(r => r.text().then(r => { ProcessJson(r) }))
+    fetch(baseUrl + "images.html").then(r => r.text().then(r => { ProcessJson(r) }))
 
 </script>
 <H1>CLICK TO OPEN</H1>
