@@ -395,7 +395,7 @@
 `
         if (full.includes(".mp4") || full.includes(".webm")) return `
         <table class="imgtd" width="512px">
-        <tr><td colspan="2"><video class="imgel" src="${full}" onclick=ClickImage("${full}")></td></tr>
+        <tr><td colspan="2"><video muted autoplay class="imgel" src="${full}" onclick=ClickImage("${full}")></td></tr>
         <tr><td colspan="2" class="textdesc">${name}</td></tr>
         <tr>
             <td width="50%" class="info">${w}x${h}</td>
