@@ -444,6 +444,22 @@
 
     var dirs = []
 
+    function OnToggleClick(dir) {
+        if (dir.element.open) {
+            for (const d of dirs) {
+                if (d.element !== dir.element && d.element.open) {
+                    d.element.open = false
+                    ClearsDetail(d.element)
+                }
+            }
+            FillDetail(dir.element, dir)
+            resize()
+        }
+        else {
+            ClearsDetail(dir.element)
+        }
+    }
+
     function ProcessJson(json) {
         dirs = JSON.parse(json)
         console.log(dirs)
@@ -457,14 +473,7 @@
             document.body.appendChild(detail)
             dir.element = detail
             dir.element.addEventListener("toggle", (event) => {
-                //console.log("toggle", dir.element)
-                if (dir.element.open) {
-                    FillDetail(dir.element, dir)
-                    resize()
-                }
-                else {
-                    ClearsDetail(dir.element)
-                }
+                OnToggleClick(dir)
             });
         }
     }
