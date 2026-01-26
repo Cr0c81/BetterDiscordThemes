@@ -29,6 +29,9 @@
         src: url(./fonts/bloggersans/firasans-light.ttf);
     }
 </style>
+<script>
+    var zoom = 2.0
+</script>
 <style>
     /* 0 */
     table {
@@ -54,13 +57,16 @@
         width: 100%; /* Растягиваем на всю ширину ячейки */
         height: auto; /* Сохраняем пропорции */
         display: block;
+        position: relative;
         transition: transform 0.3s;
-        z-index: 10;
-    }
-    .imgel:hover {
+        /*
         z-index: 1;
-        transform: scale(2.0); /* Увеличиваем в 2.0 раза */
+        */
     }
+
+    /*    .imgel:hover {
+            z-index: 10;
+        }*/
 
     /* 4 */
     .textdesc {
@@ -92,6 +98,7 @@
     .zoomable {
         transition: transform 0.3s;
     }
+
     .zoomable:hover {
         transform: scale(2.0); /* Увеличиваем в 2.0 раза */
     }
@@ -369,14 +376,22 @@
 <br><br>
 <script defer>
     const baseUrl = "https://cr0c81.github.io/BetterDiscordThemes/";
+    const maxZoom = 2.0
     var mwm = 30
     var maxWidth = window.innerWidth - mwm
     var count = Cookie.getCookie("imagecount") ?? 10
+    var zoom = 1.0
 
     function resize(cnt) {
         if (cnt === undefined) cnt = count
         else count = cnt
         count = cnt
+
+        if (count < 4)
+            zoom = 1.0
+        else
+            zoom = 1.0 + ((count - 3) / 7) * (maxZoom - 1)
+
         let w = Math.floor(maxWidth / cnt) - 5
         for (const el of document.getElementsByClassName('imgtd')) el.width = w - 5
         for (const el of document.getElementsByClassName('textdesc')) el.width = w - 2
@@ -388,17 +403,32 @@
         navigator.clipboard.writeText(baseUrl + text);
     }
 
-    function ClickImage(path) {
+    function ClickImage(path, id) {
         window.open(path, '_blank').focus();
     }
+
+    function OnMouseEnter(eid) {
+        let el = document.getElementById(eid)
+        el.style.transform = `scale(${zoom})`
+        el.style.zIndex = 10;
+    }
+
+    function OnMouseLeave(eid) {
+        let el = document.getElementById(eid)
+        el.style.transform = "scale(1.0)"
+        el.style.zIndex = 1
+    }
+
+    let id = 0
 
     function GetRecord(preview, full, name, size, w, h) {
         size = Number.parseInt(size)
         if (size > 999) size = `${Math.floor(size / 1000)} ${size % 1000}`
+        id++
         if (full.includes('.jpg'))
             return `
     <table class="imgtd" width="512px">
-        <tr><td colspan="2"><img class="imgel" src="${preview}" onclick=ClickImage("${full}")></td></tr>
+        <tr><td colspan="2"><img id="e_${id}" class="imgel" src="${preview}" onclick=ClickImage("${full}") onmouseenter=OnMouseEnter("e_${id}") onmouseleave=OnMouseLeave("e_${id}")></td></tr>
         <tr><td colspan="2" class="textdesc">${name}</td></tr>
         <tr>
             <td width="50%" class="info">${w}x${h}</td>
@@ -408,7 +438,7 @@
 `
         if (full.includes(".mp4") || full.includes(".webm")) return `
         <table class="imgtd" width="512px">
-        <tr><td colspan="2"><video muted autoplay loop class="imgel" src="${full}" onclick=ClickImage("${full}")></td></tr>
+        <tr><td colspan="2"><video id="e_${id}" muted autoplay loop class="imgel" src="${full}" onclick=ClickImage("${full}") onmouseenter=OnMouseEnter("e_${id}") onmouseleave=OnMouseLeave("e_${id}")></td></tr>
         <tr><td colspan="2" class="textdesc">${name}</td></tr>
         <tr>
             <td width="50%" class="info">${w}x${h}</td>
