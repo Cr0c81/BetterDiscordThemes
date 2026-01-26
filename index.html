@@ -54,6 +54,12 @@
         width: 100%; /* Растягиваем на всю ширину ячейки */
         height: auto; /* Сохраняем пропорции */
         display: block;
+        transition: transform 0.3s;
+        z-index: 10;
+    }
+    .imgel:hover {
+        z-index: 1;
+        transform: scale(2.0); /* Увеличиваем в 2.0 раза */
     }
 
     /* 4 */
@@ -81,6 +87,13 @@
 
     .button1 {
         font-family: "Fira Code Retina";
+    }
+
+    .zoomable {
+        transition: transform 0.3s;
+    }
+    .zoomable:hover {
+        transform: scale(2.0); /* Увеличиваем в 2.0 раза */
     }
 </style>
 
