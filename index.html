@@ -32,6 +32,27 @@
 <script>
     var zoom = 2.0
 </script>
+    <style>
+        /* Отключаем выделение и вызов меню для всех элементов по умолчанию */
+        * {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none;   /* Safari */
+            -khtml-user-select: none;    /* Konqueror HTML */
+            -moz-user-select: none;      /* Firefox */
+            -ms-user-select: none;       /* Internet Explorer/Edge */
+            user-select: none;           /* Non-prefixed version, currently supported by Chrome and Opera */
+        }
+
+        /* Включаем выделение и стандартное поведение для элементов, которые должны быть редактируемыми */
+        input, textarea, [contenteditable="true"] {
+            -webkit-touch-callout: default;
+            -webkit-user-select: text;
+            -khtml-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+    </style>
 <style>
     /* 0 */
     table {
